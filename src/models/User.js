@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const {Enum} = require('../utils/common')
 
 const {ADMIN,STUDENT,INSTRUCTOR} = Enum.accountType
-
+const bcrypt = require('bcrypt')
 
 const userSchema = new mongoose.Schema({
 
@@ -32,6 +32,10 @@ const userSchema = new mongoose.Schema({
         type : String,
         required:true
     },
+    confirmPassword : {
+        type : String,
+        required:true
+    },
     accountType : {
         type:String,
         enum : [ADMIN,STUDENT,INSTRUCTOR]
@@ -50,6 +54,13 @@ const userSchema = new mongoose.Schema({
         }
     ],
 
+    resetToken :{
+        type:String
+    },
+    resetPasswordExpires :{
+        type:String
+    },
+
     image : {
         type : String,
         required : true
@@ -64,5 +75,21 @@ const userSchema = new mongoose.Schema({
 
 
 })
+
+
+
+userSchema.pre('save', async function (next) {
+    if (this.isModified('password') || this.isNew) {
+        try {
+            const saltRounds = parseInt(ServerConfig.SALT_ROUND, 10);
+            this.password = await bcrypt.hash(this.password, saltRounds);
+            next();
+        } catch (err) {
+            next(err);
+        }
+    } else {
+        return next();
+    }
+});
 
 module.exports = mongoose.model('User',userSchema)
