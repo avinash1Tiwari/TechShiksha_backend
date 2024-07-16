@@ -1,5 +1,6 @@
 const { StatusCodes } = require('http-status-codes')
 const Tags = require('../models/Tags')
+const Category = require('../models/Category')
 
 
 // const createTags = async (req,res) =>{
@@ -21,7 +22,7 @@ const Tags = require('../models/Tags')
 
 
 
-const createTags = async (req,res) =>{
+const createCategory = async (req,res) =>{
     try{
 
         const {name,description} = req.body;
@@ -37,17 +38,17 @@ const createTags = async (req,res) =>{
 
 
         // create entry in dB
-        const tagDetails = Tags.create({
+        const categoryDetails = Category.create({
             name : name,
             description : description
         })
 
-        console.log(tagDetails)
+        console.log(categoryDetails)
 
        return res.status(StatusCodes.OK).json({
             success : success,
             message : "Successfully created the tag",
-            tagDetails : tagDetails
+            categoryDetails : categoryDetails
         })
     }
     catch(error)
@@ -65,17 +66,17 @@ const createTags = async (req,res) =>{
 
 // getAllTags
 
-const getAllTags = async (req,res) =>{
+const getAllCategories = async (req,res) =>{
     try{
         
-        const allTags = await Tags.find({},{name:true,description:true})        
+        const allCategories = await Category.find({},{name:true,description:true})        
         //true represents, records fetched must contains the fields with true marked
 
 
         return res.status(StatusCodes.OK).json({
             success : false,
             message : "All tags returned successfully",
-            tags : allTags
+            allCategories : allCategories
         })
     }
     catch(error)
@@ -91,6 +92,6 @@ const getAllTags = async (req,res) =>{
 
 
 module.exports = {
-    createTags,
-    getAllTags
+    createCategory,
+    getAllCategories
 }

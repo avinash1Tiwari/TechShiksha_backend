@@ -1,23 +1,24 @@
 const User = require('../models/User')
 
-const Tags = require('../models/Tags')
+const Tags = require('../models/Category')
 const Course = require('../models/Course')
 
 const imgaeUploader = require('../utils/common/imgaeUploader')
 const { StatusCodes } = require('http-status-codes')
 const {ServerConfig} = require('../config')
+const Category = require('../models/Category')
 
 const cretaCourse = async (req,res) =>{
 
     try{
 
     const {courseName,courseDescription,instructor,whatYouWillLearn,
-        ratingAndReveiws,tags,studentEnrolled
+        ratingAndReveiws,tags,studentEnrolled,category
     } = req.body;
 
 const thumbnail = req.files.thumbnailImage;
 
-if(!courseName || !courseDescription || !whatYouWillLearn || !tags || !thumbnail)
+if(!courseName || !courseDescription || !whatYouWillLearn || !tags || !thumbnail || !category)
 {
     return res.status(StatusCodes.BAD_REQUEST).json({
         success: false,
@@ -41,12 +42,12 @@ if(!courseName || !courseDescription || !whatYouWillLearn || !tags || !thumbnail
 
 
     // check tagDetails
-    const tagDetails = await Tags.findById(tags);
-    if(!tagDetails)
+    const categoryDetails = await Tags.findById(category);
+    if(!categoryDetails)
     {
         return res.status(StatusCodes.BAD_REQUEST).json({
             success : false,
-            message : "Tag details not found"
+            message : "category details not found"
         })
     }
 
@@ -62,7 +63,8 @@ if(!courseName || !courseDescription || !whatYouWillLearn || !tags || !thumbnail
         courseDescription,
         whatYouWillLearn,
         instructor : instructorDetails._id,
-        tags :tagDetails._id,
+        tags,
+        category :categoryDetails._id,
         thumbnail : thumbnailImage.secure_url,
         price,
     })
@@ -83,7 +85,7 @@ if(!courseName || !courseDescription || !whatYouWillLearn || !tags || !thumbnail
 
     // update tag schema
 
-    await Tags.findByIdAndUpdate(
+    await Category.findByIdAndUpdate(
         {_id:tagDetails._id},
         {
             $push : {
