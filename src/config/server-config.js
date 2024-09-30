@@ -11,5 +11,6 @@ module.exports = {
     SALT_ROUND : process.env.SALT_ROUND,
     JWT_EXPIRE_TIME : process.env.JWT_EXPIRE_TIME,
     SECRETE_KEY : process.env.SECRETE_KEY,
-    RESET_LINK : process.env.RESET_LINK
+    RESET_LINK : process.env.RESET_LINK,
+    FOLDER_NAME : process.env.FOLDER_NAME
 }

@@ -94,7 +94,7 @@ const resetPassword = async (req,res) =>{
 
 
     await User.findOneAndUpdate(
-        {token:token},
+        {resetToken:resetToken},
         {password:hashedPassword},
         {new:true}
     )

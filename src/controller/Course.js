@@ -86,7 +86,7 @@ if(!courseName || !courseDescription || !whatYouWillLearn || !tags || !thumbnail
     // update tag schema
 
     await Category.findByIdAndUpdate(
-        {_id:tagDetails._id},
+        {_id:categoryDetails._id},
         {
             $push : {
                 course :newCourse._id

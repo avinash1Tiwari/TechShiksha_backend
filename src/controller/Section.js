@@ -74,6 +74,7 @@ exports.createSection = async(req,res) =>{
     // return response
     return res.status(StatusCodes.OK).json({
         success : success,
+        updatedDetails:updatedDetails,
         message : "Section name updated successfully",
     })
 
@@ -94,7 +95,7 @@ try{
     const {sectionId} = req.params;
 
     if(!sectionId)
-    {
+    { 
         return res.status(StatusCodes.BAD_REQUEST).json({
             success : false,
             message : "scetionId not present in params"
@@ -103,7 +104,7 @@ try{
 
 
     await Section.findByIdAndDelete(sectionId);
-
+//   thinkOf[testing] : do we need to delete section from course-schema
     return res.status(StatusCodes.OK).json({
         success : true,
         message : "successfully deleted the section"

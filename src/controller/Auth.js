@@ -226,28 +226,31 @@ const payLoad =  { id: existingUser._id,
     ServerConfig.SECRETE_KEY,
     { expiresIn: ServerConfig.JWT_EXPIRE_TIME }
   );
+  
+  existingUser.token = token;
+  existingUser.password = undefined;
 
   // if cookie already present => then remove cookie first then set cookie again(this concept is added b/c as we refresh our cookie agai and agin every after 30-seconds)
   if (req.cookies[`${existingUser._id}`]) {
     req.cookies[`${existingUser._id}`] = "";
   }
 
-  // cookie generation from backend
-  res.cookie(String(existingUser._id), token, {
-    path: "/",
-    expires: new Date(Date.now() + 1000 * 35),
-    httpOnly: true,
+  const options = {
+    expires:new Date(Date.now() + 3*24*60*60*1000),
+    httpOnly:true,
     sameSite: "lax",
-  });
+    path: "/",
+  }
+  // cookie generation from backend
+  res.cookie(("token", token,options).status(200).json({
+  
+    success:true,
+    token,
+    existingUser,
+    message : "Logged in successfully"
 
-  return res.status(StatusCodes.OK).json({
-    success: true,
-    data: "Successfully Logged In !!",
-    message: "",
-    user: existingUser,
-    token: token,
-    expiresIn: ServerConfig.JWT_EXPIRE_TIME,
-  });
+  }))
+   
 };
 
 const changePassword = async (req, res) => {
