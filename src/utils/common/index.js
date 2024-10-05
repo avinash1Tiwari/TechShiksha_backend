@@ -1,3 +1,7 @@
+const mailSender = require('./mailSender');
+
 module.exports = {
-    Enum : require('./Enum')
+    Enum : require('./Enum'),
+    uploadImageToCloudinary : require ('./imgaeUploader'),
+    mailSender:require('./mailSender')
 }
